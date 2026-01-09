@@ -1,226 +1,352 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rock_paper_scissor</title>
     <style>
-        body{
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: clamp(20px, 5vw, 40px);
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .title {
+            font-size: clamp(24px, 5vw, 32px);
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #222;
+            letter-spacing: -0.5px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: clamp(10px, 3vw, 20px);
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .move-button {
             background-color: white;
-            color:black;
-            font-family: Arial;
-        }
-        .title
-        {
-          font-size: 30px;
-          font-weight: bold;
-          text-decoration: underline;
-        }
-        .move-icon{
-            height: 70px;
-            background-color: white;
+            border: 2px solid #e0e0e0;
+            width: clamp(80px, 20vw, 100px);
+            height: clamp(80px, 20vw, 100px);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .move-button{
-             background-color: transparent;
-             border :3px solid green;
-             width :120px;
-             height :120px;
-             border-radius: 60px;
-             margin-right: 10px;
-             cursor: pointer;
+        .move-button:hover {
+            border-color: #333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        .result{
-            font-size: 25px;
-            font-weight: bold;
-            margin-top: 50px;
+        .move-button:active {
+            transform: translateY(0);
         }
 
-        .score{
-             margin-top: 10px;
-             margin-bottom:15px ;
+        .move-icon {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .result {
+            font-size: clamp(20px, 4vw, 28px);
+            font-weight: 600;
+            margin-bottom: 20px;
+            min-height: 35px;
+            color: #333;
+        }
+
+        .moves-display {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #fafafa;
+            border-radius: 8px;
+            font-size: clamp(14px, 3vw, 16px);
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .moves-display img {
+            width: clamp(40px, 10vw, 60px);
+            height: clamp(40px, 10vw, 60px);
+            margin: 8px 0;
+        }
+
+        .heading {
+            font-size: clamp(14px, 3vw, 16px);
+            font-weight: 600;
+            margin: 25px 0 10px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .score {
+            font-size: clamp(14px, 3vw, 16px);
+            margin-bottom: 25px;
+            color: #555;
+            padding: 12px;
+            background-color: #fafafa;
+            border-radius: 6px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 25px;
         }
 
         .reset-score-button,
-        .Auto-play-button{
-            background-color: yellow;
-            border:none;
-            font-size: 15px;
-            padding: 8px 15px;
+        .Auto-play-button {
+            background-color: #333;
+            color: white;
+            border: none;
+            font-size: clamp(13px, 2.5vw, 15px);
+            padding: 12px 24px;
             cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            min-width: 100px;
         }
 
-        .heading{
-            margin-top:40px;
-            margin-bottom:5px;
-            text-decoration: underline;
-            font-weight:bold;
+        .reset-score-button:hover,
+        .Auto-play-button:hover {
+            background-color: #555;
+            transform: translateY(-1px);
+        }
+
+        .reset-score-button:active,
+        .Auto-play-button:active {
+            transform: translateY(0);
+        }
+
+        /* Responsive breakpoints */
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+
+            .button-container {
+                gap: 12px;
+            }
+
+            .move-button {
+                width: 75px;
+                height: 75px;
+                padding: 12px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .moves-display {
+                flex-direction: row;
+                gap: 40px;
+            }
         }
     </style>
 </head>
+
 <body>
-    <p class ="title">Rock Paper scissor</p>
-    <button class="move-button js-rock-button"><img src = "images/Rock-1.png" class = "move-icon" alt=""></button>
-    <button class="move-button js-paper-button"><img src="images/Paper-1.png" class = "move-icon" alt=""></button>
-    <button class="move-button js-scissor-button"><img src="images/Scissor-1.png" class = "move-icon" alt=""></button>
+    <div class="container">
+        <p class="title">Rock Paper Scissor</p>
 
-    <p class = "js-result result"></p>
-    <p class ="js-moves"></p>
-    <span class ="heading">Your score</span>
-    <p class = "js-score score"></p>
+        <div class="button-container">
+            <button class="move-button js-rock-button"><img src="images/Rock-1.png" class="move-icon"
+                    alt="Rock"></button>
+            <button class="move-button js-paper-button"><img src="images/Paper-1.png" class="move-icon"
+                    alt="Paper"></button>
+            <button class="move-button js-scissor-button"><img src="images/Scissor-1.png" class="move-icon"
+                    alt="Scissor"></button>
+        </div>
 
-    <button onclick = "
-     score.wins = 0;
-     score.lose = 0;
-     score.tie = 0;
-     localStorage.removeItem('score');
-     updateScoreElement();
-    " class="reset-score-button">Reset</button>
-    <button class ="Auto-play-button" onclick="
-    autoplay();
-    ">AutoPlay</button>
+        <p class="js-result result"></p>
+        <div class="js-moves moves-display"></div>
 
-<script>
-    let score = JSON.parse(localStorage.getItem('score'))||{
-wins :0,
-lose :0,
-tie :0
-    };
+        <span class="heading">Your Score</span>
+        <p class="js-score score"></p>
 
-   updateScoreElement();
-
-   let isAutoPlaying = false;
-
-   let intervalId;
- 
-   function autoplay()
-   {
-    if(!isAutoPlaying){
-   intervalId =  setInterval(function(){
-     const playerMove = pickComputerMove();
-     play(playerMove);
-    },1000);
-
-    isAutoPlaying = true;
-}
-
-else{
-
-    clearInterval(intervalId);
-    isAutoPlaying = false;
-}
-   }
-
-document.querySelector('.js-rock-button')
-.addEventListener('click',() => {
-    play('Rock');
-});
+        <div class="controls">
+            <button onclick="
+             score.wins = 0;
+             score.lose = 0;
+             score.tie = 0;
+             localStorage.removeItem('score');
+             updateScoreElement();
+            " class="reset-score-button">Reset</button>
+            <button class="Auto-play-button" onclick="autoplay();">AutoPlay</button>
+        </div>
+    </div>
 
 
-document.querySelector('.js-paper-button')
-.addEventListener('click',() => {
-    play('Paper');
-});
+    <script>
+        let score = JSON.parse(localStorage.getItem('score')) || {
+            wins: 0,
+            lose: 0,
+            tie: 0
+        };
+
+        updateScoreElement();
+
+        let isAutoPlaying = false;
+
+        let intervalId;
+
+        function autoplay() {
+            if (!isAutoPlaying) {
+                intervalId = setInterval(function () {
+                    const playerMove = pickComputerMove();
+                    play(playerMove);
+                }, 1000);
+
+                isAutoPlaying = true;
+            }
+
+            else {
+
+                clearInterval(intervalId);
+                isAutoPlaying = false;
+            }
+        }
+
+        document.querySelector('.js-rock-button')
+            .addEventListener('click', () => {
+                play('Rock');
+            });
 
 
-document.querySelector('.js-scissor-button')
-.addEventListener('click',() => {
-    play('Scissor');
-});
-  
-document.body.addEventListener('keydown',(event) =>{
-    if(event.key === 'r')
-    play('rock');
-    else if(event.key === 'p')
-    play('paper');
-    else if(event.key === 's')
-    play('scissor');
-});
-    function play(playerMove)
-    {
-        const computerMove = pickComputerMove();
-        let result = '';
+        document.querySelector('.js-paper-button')
+            .addEventListener('click', () => {
+                play('Paper');
+            });
 
-        if(playerMove === 'Rock')
-    {
-        if(computerMove === 'Rock')
-        result = 'Tie';
-        else if(computerMove === 'Scissor')
-        result = 'Win';
-        else if(computerMove === 'Paper' )
-        result = 'Lose';
-    }
-    else if(playerMove === 'Paper')
-    {
-        if(computerMove === 'Rock')
-        result = 'Win';
-        else if(computerMove === 'Scissor')
-        result = 'Lose';
-        else if(computerMove === 'Paper' )
-        result = 'Tie';
-    }
-    else if(playerMove === 'Scissor')
-    {
-        if(computerMove === 'Rock')
-        result = 'Lose';
-        else if(computerMove === 'Scissor')
-        result = 'Tie';
-        else if(computerMove === 'Paper' )
-        result = 'Win';
-    }
 
-    if(result === 'Win')
-    score.wins +=1;
-    else if(result === 'Lose')
-    score.lose +=1;
-    else if(result === 'Tie')
-    score.tie +=1;
+        document.querySelector('.js-scissor-button')
+            .addEventListener('click', () => {
+                play('Scissor');
+            });
 
-   localStorage.setItem('score',JSON.stringify(score));
+        document.body.addEventListener('keydown', (event) => {
+            if (event.key === 'r')
+                play('rock');
+            else if (event.key === 'p')
+                play('paper');
+            else if (event.key === 's')
+                play('scissor');
+        });
+        function play(playerMove) {
+            const computerMove = pickComputerMove();
+            let result = '';
 
-   updateScoreElement();
+            if (playerMove === 'Rock') {
+                if (computerMove === 'Rock')
+                    result = 'Tie';
+                else if (computerMove === 'Scissor')
+                    result = 'Win';
+                else if (computerMove === 'Paper')
+                    result = 'Lose';
+            }
+            else if (playerMove === 'Paper') {
+                if (computerMove === 'Rock')
+                    result = 'Win';
+                else if (computerMove === 'Scissor')
+                    result = 'Lose';
+                else if (computerMove === 'Paper')
+                    result = 'Tie';
+            }
+            else if (playerMove === 'Scissor') {
+                if (computerMove === 'Rock')
+                    result = 'Lose';
+                else if (computerMove === 'Scissor')
+                    result = 'Tie';
+                else if (computerMove === 'Paper')
+                    result = 'Win';
+            }
 
-    document.querySelector('.js-result')
-   .innerHTML = result;
+            if (result === 'Win')
+                score.wins += 1;
+            else if (result === 'Lose')
+                score.lose += 1;
+            else if (result === 'Tie')
+                score.tie += 1;
 
-   document.querySelector('.js-moves')
-   .innerHTML =`You
+            localStorage.setItem('score', JSON.stringify(score));
+
+            updateScoreElement();
+
+            document.querySelector('.js-result')
+                .innerHTML = result;
+
+            document.querySelector('.js-moves')
+                .innerHTML = `You
  <img src="images/${playerMove}-1.png" class = "move-icon" alt=""><br>
  Computer
  <img src="images/${computerMove}-1.png" class = "move-icon" alt="">
     `;
-}
+        }
 
-    function updateScoreElement(){
-document.querySelector('.js-score')
-.innerHTML =`
+        function updateScoreElement() {
+            document.querySelector('.js-score')
+                .innerHTML = `
 Wins : ${score.wins}, Lose : ${score.lose}, Tie : ${score.tie}`;
-    }
+        }
 
-    function pickComputerMove()
-    {
-        const randomNumber = Math.random();
-         let computerMove = '';
+        function pickComputerMove() {
+            const randomNumber = Math.random();
+            let computerMove = '';
 
-    if(randomNumber>=0 && randomNumber<1/3)
-    {
-        computerMove = 'Rock';
-    }
-    else if(randomNumber>=1/3 && randomNumber<2/3)
-    {
-        computerMove = 'Paper';
-    }
-    else if(randomNumber>=2/3 && randomNumber<1)
-    {
-        computerMove ='Scissor';
-    }
+            if (randomNumber >= 0 && randomNumber < 1 / 3) {
+                computerMove = 'Rock';
+            }
+            else if (randomNumber >= 1 / 3 && randomNumber < 2 / 3) {
+                computerMove = 'Paper';
+            }
+            else if (randomNumber >= 2 / 3 && randomNumber < 1) {
+                computerMove = 'Scissor';
+            }
 
-    return computerMove;
-    }
+            return computerMove;
+        }
 
-    
 
-</script>
+
+    </script>
 </body>
+
 </html>
